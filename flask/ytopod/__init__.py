@@ -1,8 +1,8 @@
 from flask import Flask
+from .config import Config
 import os
 
 app = Flask(__name__, static_url_path='')
-app.config["TEMPLATES_AUTO_RELOAD"] = True
-app.config["SECRET_KEY"] = os.urandom(32)
+app.config.from_object(Config)
 
 from ytopod import views
