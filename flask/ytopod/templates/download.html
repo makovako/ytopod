@@ -1,16 +1,19 @@
 {% extends 'layout.html' %} {% block content %}
 
-<form>
-  <div class="form-group">
-    <label for="video-url">Insert video</label>
-    <input
-      type="text"
-      class="form-control"
-      id="video-utl"
-      placeholder="Insert youtube video url here"
-    />
+<form method="POST" action="/download">
+    {{ form.csrf_token()}}
+  <div class="form-group form-field">
+    {{ form.video_url.label }}
+    {{ form.video_url(size=20, class_="form-control", placeholder="Insert youtube video url here") }}
+    {% if form.video_url.errors %}
+        <ul class="errors list-group list-group-flush">
+          {% for error in form.video_url.errors %}
+            <li class="list-group-item d-flex justify-content-between align-items-center"><span class="text-danger mr-5">ERROR: {{ error }}</span><span class="badge badge-danger badge-pill text-right">!</span></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  {{ form.submit(class="btn btn-primary") }}
 </form>
 
 {% endblock %}

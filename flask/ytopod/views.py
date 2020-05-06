@@ -1,6 +1,7 @@
 from ytopod import app
-from flask import render_template
+from flask import render_template, redirect, url_for, request
 from .nav import nav
+from .forms import DownloadForm
 
 sample_videos = [
     {
@@ -32,12 +33,16 @@ def index():
             link["active"] = True
     return render_template("index.html", title="Home - ytopod", nav=nav)
 
-@app.route("/download")
+@app.route("/download", methods=("GET", "POST"))
 def download():
     for link in nav:
         if link["name"] == "Download":
             link["active"] = True
-    return render_template("download.html", title="Download - ytopod", nav=nav)
+    form = DownloadForm()
+    if request.method == "POST" and form.validate():
+        print(form.data['video_url'])
+        return redirect(url_for("all"))
+    return render_template("download.html", title="Download - ytopod", nav=nav, form=form)
 
 @app.route("/all")
 def all():
