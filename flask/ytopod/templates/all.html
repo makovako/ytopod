@@ -14,9 +14,9 @@
         {% for video in videos %}
         <tr>
             <th scope="row">{{ video.id }}</th>
-            <td>{{ video.name}}</td>
+            <td>{{ video.title}}</td>
             <td class="text-right">
-                <a class="btn btn-outline-warning" href={{video.url}} target="_blank" rel="noopener noreferrer"><i class="fa fa-external-link text-dark" aria-hidden="true"></i></a>
+                <a class="btn btn-outline-warning" href="https://www.youtube.com/watch?v={{video.youtube_id}}" target="_blank" rel="noopener noreferrer"><i class="fa fa-external-link text-dark" aria-hidden="true"></i></a>
                 <a class="btn btn-outline-danger" href="delete/{{video.id}}"><i class="fa fa-times text-dark" aria-hidden="true"></i></a>
             </td>
         </tr>

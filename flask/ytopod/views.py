@@ -1,6 +1,9 @@
 from flask import render_template, redirect, url_for, request, current_app as app
 from .nav import nav
 from .forms import DownloadForm
+from . import db
+from .utils import extract_video_id
+from .models import Video
 
 sample_videos = [
     {
@@ -39,7 +42,14 @@ def download():
             link["active"] = True
     form = DownloadForm()
     if request.method == "POST" and form.validate():
-        print(form.data['video_url'])
+        video_url = form.data['video_url']
+        video_id = extract_video_id(video_url)
+        if not video_id:
+            form.video_url.errors.append("Cannot parse video URL")
+            return render_template("download.html", title="Download - ytopod", nav=nav, form=form)
+        new_video = Video(video_id,'test','description test','uploader test', 'thumbnail test')
+        db.session.add(new_video)
+        db.session.commit()
         return redirect(url_for("all"))
     return render_template("download.html", title="Download - ytopod", nav=nav, form=form)
 
@@ -48,4 +58,5 @@ def all():
     for link in nav:
         if link["name"] == "All":
             link["active"] = True
-    return render_template("all.html", title="All - ytopod", nav=nav, videos=sample_videos)
+    videos = Video.query.all()
+    return render_template("all.html", title="All - ytopod", nav=nav, videos=videos)
