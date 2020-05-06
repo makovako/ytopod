@@ -20,6 +20,11 @@ def clear_nav():
     for link in nav:
         link["active"] = False
 
+@app.errorhandler(404)
+def not_found(error):
+    print(error)
+    return render_template("404.html", title="Not Found - ytopod", nav=nav)
+
 @app.route("/")
 def index():
     for link in nav:
