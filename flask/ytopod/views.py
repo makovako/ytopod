@@ -5,11 +5,13 @@ from .nav import nav
 sample_videos = [
     {
         "id": 1,
-        "name": "lala"
+        "name": "lala",
+        "url": "https://www.google.com"
     },
     {
         "id": 2,
-        "name":"lolo"
+        "name":"lolo",
+        "url": "https://www.google.com"
     }
 ]
 
