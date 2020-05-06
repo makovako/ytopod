@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import URL, DataRequired, ValidationError
-import re
 
 def youtube_url_check(form, field):
     if not ("youtube" in field.data and ("?v=" in field.data or "&v=" in field.data)):

@@ -1,5 +1,4 @@
-from ytopod import app
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, current_app as app
 from .nav import nav
 from .forms import DownloadForm
 

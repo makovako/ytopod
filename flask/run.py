@@ -1,4 +1,6 @@
-from ytopod import app
+from ytopod import create_app
+
+app = create_app()
 
 if __name__ == "__main__":
     app.run()

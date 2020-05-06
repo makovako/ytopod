@@ -1,8 +1,11 @@
 from flask import Flask
-from .config import Config
 import os
 
-app = Flask(__name__, static_url_path='')
-app.config.from_object(Config)
+def create_app():
+    app = Flask(__name__, static_url_path='', instance_relative_config=False)
+    app.config.from_object('config.Config')
 
-from ytopod import views
+    with app.app_context():
+        from . import views
+
+        return app
