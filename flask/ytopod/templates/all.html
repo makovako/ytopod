@@ -16,12 +16,53 @@
             <th scope="row">{{ video.id }}</th>
             <td>{{ video.title}}</td>
             <td class="text-right">
-                <a class="btn btn-outline-warning" href="https://www.youtube.com/watch?v={{video.youtube_id}}" target="_blank" rel="noopener noreferrer"><i class="fa fa-external-link text-dark" aria-hidden="true"></i></a>
-                <a class="btn btn-outline-danger" href="delete/{{video.id}}"><i class="fa fa-times text-dark" aria-hidden="true"></i></a>
+                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#infoModal{{video.id}}"><i class="fa fa-info" aria-hidden="true"></i></button>
+                <a class="btn btn-outline-warning" href="https://www.youtube.com/watch?v={{video.youtube_id}}" target="_blank" rel="noopener noreferrer"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{video.id}}"><i class="fa fa-times" aria-hidden="true"></i></button>
             </td>
         </tr>
         {% endfor%}
     </tbody>
-</table>
 
+</table>
+{% for video in videos %}
+<div class="modal fade bd-example-modal.lg" id="infoModal{{video.id}}" tabindex="-1" role="dialog" aria-labelledby="infoModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">Information about {{video.title}}</div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4"><img width="100%" src={{video.thumbnail}}></div>
+                        <div class="col-md-8">
+                            <div class="row p-2">{{video.title}}</div>
+                            <div class="row p-2">{{video.uploader}}</div>
+                            <div class="row p-2">{{video.created}}</div>
+                        </div>
+                    </div>
+                    <div class="row p-2">{{video.description}}</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% for video in videos %}
+<div class="modal fade" id="deleteModal{{video.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">Delete {{video.title}}</div>
+            <div class="modal-body">Are you sure you would like to delete this video?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="/delete/{{video.id}}?confirm=true" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
 {% endblock %}

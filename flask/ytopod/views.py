@@ -47,7 +47,7 @@ def download():
         if not video_id:
             form.video_url.errors.append("Cannot parse video URL")
             return render_template("download.html", title="Download - ytopod", nav=nav, form=form)
-        new_video = Video(video_id,'test','description test','uploader test', 'thumbnail test')
+        new_video = Video(video_id,'test','description test some more','uploader test', 'https://source.unsplash.com/random')
         db.session.add(new_video)
         db.session.commit()
         return redirect(url_for("all"))
@@ -60,3 +60,12 @@ def all():
             link["active"] = True
     videos = Video.query.all()
     return render_template("all.html", title="All - ytopod", nav=nav, videos=videos)
+
+@app.route("/delete/<id>")
+def delete(id):
+    confirm = request.args.get("confirm")
+    if confirm == "true":
+        to_delete = Video.query.get(id)
+        db.session.delete(to_delete)
+        db.session.commit()
+    return redirect(url_for("all"))
