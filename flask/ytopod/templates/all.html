@@ -7,6 +7,7 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
+            <th scope="col">Added</th>
             <th scope="col" class="text-right">Actions</th>    
         </tr>
     </thead>
@@ -14,7 +15,8 @@
         {% for video in videos %}
         <tr>
             <th scope="row">{{ video.id }}</th>
-            <td>{{ video.title}}</td>
+            <td>{{ video.title }}</td>
+            <td>{{ video.created }}</td>
             <td class="text-right">
                 <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#infoModal{{video.id}}"><i class="fa fa-info" aria-hidden="true"></i></button>
                 <a class="btn btn-outline-warning" href="https://www.youtube.com/watch?v={{video.youtube_id}}" target="_blank" rel="noopener noreferrer"><i class="fa fa-external-link" aria-hidden="true"></i></a>
