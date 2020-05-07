@@ -1,9 +1,11 @@
-from flask import render_template, redirect, url_for, request, current_app as app
+from flask import render_template, redirect, url_for, request, current_app as app, send_from_directory
 from .nav import nav
 from .forms import DownloadForm
 from . import db
 from .utils import extract_video_id
 from .models import Video
+from .download import download_video
+import os
 
 sample_videos = [
     {
@@ -35,6 +37,12 @@ def index():
             link["active"] = True
     return render_template("index.html", title="Home - ytopod", nav=nav)
 
+@app.route('/download/<path>',methods=['GET'])
+def get_download_files(path):
+    """Allows all content of download folder to be served"""
+    
+    return send_from_directory('download',path)
+
 @app.route("/download", methods=("GET", "POST"))
 def download():
     for link in nav:
@@ -47,10 +55,16 @@ def download():
         if not video_id:
             form.video_url.errors.append("Cannot parse video URL")
             return render_template("download.html", title="Download - ytopod", nav=nav, form=form)
-        new_video = Video(video_id,'test','description test some more','uploader test', 'https://source.unsplash.com/random')
-        db.session.add(new_video)
-        db.session.commit()
-        return redirect(url_for("all"))
+        ok, res = download_video(video_url)
+        if ok:
+            db.session.add(res)
+            db.session.commit()
+            return redirect(url_for("all"))
+        else:
+            form.video_url.errors.append("There was problem with Downloading.")
+            form.video_url.errors.append(f'{res}')
+            return render_template("download.html", title="Download - ytopod", nav=nav, form=form)
+            
     return render_template("download.html", title="Download - ytopod", nav=nav, form=form)
 
 @app.route("/all")
@@ -66,6 +80,7 @@ def delete(id):
     confirm = request.args.get("confirm")
     if confirm == "true":
         to_delete = Video.query.get(id)
+        os.remove(os.path.join(app.root_path,'download',f'{to_delete.youtube_id}.mp3'))
         db.session.delete(to_delete)
         db.session.commit()
     return redirect(url_for("all"))
