@@ -8,19 +8,6 @@ from .download import download_video
 from .feed import generate_feed
 import os
 
-sample_videos = [
-    {
-        "id": 1,
-        "name": "lala",
-        "url": "https://www.google.com"
-    },
-    {
-        "id": 2,
-        "name":"lolo",
-        "url": "https://www.google.com"
-    }
-]
-
 @app.before_request
 def clear_nav():
     for link in nav:
