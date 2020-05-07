@@ -1,3 +1,6 @@
 venv/
 __pycache__/
 Notes.md
+download/
+.env.sample
+.gitignore
