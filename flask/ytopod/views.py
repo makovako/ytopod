@@ -5,6 +5,7 @@ from . import db
 from .utils import extract_video_id
 from .models import Video
 from .download import download_video
+from .feed import generate_feed
 import os
 
 sample_videos = [
@@ -59,6 +60,7 @@ def download():
         if ok:
             db.session.add(res)
             db.session.commit()
+            generate_feed(Video.query.all())
             return redirect(url_for("all"))
         else:
             form.video_url.errors.append("There was problem with Downloading.")
