@@ -18,9 +18,9 @@
             <td>{{ video.title }}</td>
             <td>{{ video.created }}</td>
             <td class="text-right">
-                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#infoModal{{video.id}}"><i class="fa fa-info" aria-hidden="true"></i></button>
-                <a class="btn btn-outline-warning" href="https://www.youtube.com/watch?v={{video.youtube_id}}" target="_blank" rel="noopener noreferrer"><i class="fa fa-external-link" aria-hidden="true"></i></a>
-                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{video.id}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <button type="button" class="btn btn-outline-success" data-toggle="modal tooltip" data-placement="bottom" data-target="#infoModal{{video.id}}" title="Info"><i class="fa fa-info" aria-hidden="true"></i></button>
+                <a class="btn btn-outline-warning" href="https://www.youtube.com/watch?v={{video.youtube_id}}" target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-placement="bottom" title="Open video"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                <button type="button" class="btn btn-outline-danger" data-toggle="modal tooltip" data-placement="bottom" data-target="#deleteModal{{video.id}}" title="Remove video"><i class="fa fa-times" aria-hidden="true"></i></button>
             </td>
         </tr>
         {% endfor%}
