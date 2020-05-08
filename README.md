@@ -13,3 +13,10 @@ This app allows you to download youtube videos, convert them to audio and add th
 - [ ] auth
   - [ ] login, protect almost all paths except home
   - [ ] first time register, if there is no user
+  - [ ] before first request check if any user exists, otherwise show first start
+    - [ ] otherwise raise not found
+- [ ] progress bar for videos being downloaded
+  - [ ] bootstrap progress bar on `all` site
+  - [ ] use socket io
+  - [ ] allow user to close it, maybe cancel the download
+  - [ ] auto close, not sure
