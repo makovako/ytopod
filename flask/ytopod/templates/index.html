@@ -8,5 +8,10 @@
 
 <h1>Welcome</h1>
 <p>Either download new video or click on all to show already downloaded videos.</p>
+{% if user %}
+<p>You are logged in as : {{user}}</p>
+{% else %}
+<p>You are logged out.</p>
+{% endif %}
 
 {% endblock %}
