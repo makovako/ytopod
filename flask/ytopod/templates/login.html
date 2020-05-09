@@ -1,0 +1,29 @@
+{% extends 'layout.html'%} {% block content %}
+<form method="POST" action="/login">
+    {{ form.csrf_token() }}
+    <div class="form-group form-field">
+        {{ form.username.label }}
+        {{ form.username(class_="form-control", placeholder="Your username") }}
+        {% if form.username.errors %}
+        <ul class="errors list-group list-group-flush">
+          {% for error in form.username.errors %}
+            <li class="list-group-item d-flex justify-content-between align-items-center"><span class="text-danger mr-5">ERROR: {{ error }}</span><span class="badge badge-danger badge-pill text-right">!</span></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    <div class="form-group form-field">
+        {{ form.password.label }}
+        {{ form.password(class_="form-control") }}
+        {% if form.password.errors %}
+        <ul class="errors list-group list-group-flush">
+          {% for error in form.password.errors %}
+            <li class="list-group-item d-flex justify-content-between align-items-center"><span class="text-danger mr-5">ERROR: {{ error }}</span><span class="badge badge-danger badge-pill text-right">!</span></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    {{ form.submit(class_="btn btn-primary")}}
+</form>
+
+{% endblock %}
