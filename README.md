@@ -10,13 +10,14 @@ This app allows you to download youtube videos, convert them to audio and add th
   - [ ] edit metadata about feed
   - [ ] assign video to more feeds
   - [ ] ordering per feed
-- [ ] auth
+- [x] auth
   - [x] login, protect almost all paths except home
-  - [ ] Add login mechanizms into UI, buttons, navigation filtering
-    - [ ] show simple navigation for unauthorized and rich navigation for logged in user
+  - [x] Add login mechanizms into UI, buttons, navigation filtering
+    - [x] show simple navigation for unauthorized and rich navigation for logged in user
   - [x] first time register, if there is no user
   - [x] before first request check if any user exists, otherwise show first start
     - [x] on register path ~~redirect home~~ raise 404 if there is user already
+  - [ ] create http auth for podcast protection
 - [ ] progress bar for videos being downloaded
   - [ ] bootstrap progress bar on `all` site
   - [ ] use socket io
