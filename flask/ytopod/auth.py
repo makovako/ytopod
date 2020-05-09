@@ -1,7 +1,7 @@
-from flask import current_app as app, render_template, redirect, url_for, request
+from flask import current_app as app, render_template, redirect, url_for, request, abort
 from flask_login import current_user, login_user, login_required, logout_user
 from .nav import nav
-from .forms import SignupForm, LoginForm
+from .forms import RegisterForm, LoginForm
 from .models import db, User
 from . import login_manager
 
@@ -21,9 +21,11 @@ def login():
     return render_template("login.html", title="Login - ytopod", nav=nav, form=form)
 
 
-@app.route('/signup', methods=["GET","POST"])
-def signup():
-    form = SignupForm()
+@app.route('/initial_setup', methods=["GET","POST"])
+def initial_setup():
+    if User.query.all():
+        abort(404)
+    form = RegisterForm()
     if request.method == "POST" and form.validate():
         existing_user = User.query.filter_by(username=form.username.data).first()
         if existing_user is None:
@@ -34,7 +36,7 @@ def signup():
             login_user(user)
             return redirect(url_for("index"))
         form.confirm.errors.append("User with given username already exists")
-    return render_template("signup.html", title="SignUp - ytopod", nav=nav, form=form)
+    return render_template("initial_setup.html", title="Initial Setup - ytopod", nav=nav, form=form)
 
 @app.route('/logout')
 @login_required

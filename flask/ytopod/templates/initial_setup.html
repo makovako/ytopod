@@ -1,5 +1,8 @@
 {% extends 'layout.html'%} {% block content %}
-<form method="POST" action="/signup">
+<h1>Initial setup</h1>
+<p>Please create a single user, that will be able to login and manage this app.</p>
+<p>Warning: For now there is no possibility to change the user info, so don't forget your credentials. If you forget them, you need to delete the user from the database. After that you will be prompted to create new one.</p>
+<form method="POST" action="/initial_setup">
     {{ form.csrf_token() }}
     <div class="form-group form-field">
         {{ form.username.label }}

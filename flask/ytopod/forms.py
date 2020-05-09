@@ -16,8 +16,8 @@ class DownloadForm(FlaskForm):
 
     submit = SubmitField('Submit')
 
-class SignupForm(FlaskForm):
-    """User Signup Form."""
+class RegisterForm(FlaskForm):
+    """User Initial resgistration Form."""
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6, message='Select a stronger password.')])
     confirm = PasswordField('Confirm Your Password', validators=[DataRequired(), EqualTo('password', message='Passwords must match.')])

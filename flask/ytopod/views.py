@@ -5,10 +5,15 @@ from .nav import nav
 from .forms import DownloadForm
 from . import db
 from .utils import extract_video_id
-from .models import Video
+from .models import Video, User
 from .download import download_video
 from .feed import generate_feed
 import os
+
+@app.before_request
+def initial_user_setup():
+    if not User.query.all() and request.endpoint != "initial_setup":
+        return redirect(url_for("initial_setup"))
 
 @app.before_request
 def clear_nav():
