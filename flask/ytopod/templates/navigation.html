@@ -14,7 +14,22 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        {% for link in nav %}
+        {% for link in nav["left"] %}
+            {% if link.active %}
+                <li class="nav-item active">
+            {% else %}
+                <li class="nav-item">
+            {% endif %}
+            <a class="nav-link" href="{{ link.url }}">
+            {{ link.name }} {% if link.active %}
+            <span class="sr-only">(current)</span>
+            {% endif %}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      <ul class="navbar-nav mt-2 mt-lg-0">
+        {% for link in nav["right"] %}
             {% if link.active %}
                 <li class="nav-item active">
             {% else %}

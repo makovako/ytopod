@@ -6,12 +6,12 @@
 
 {% block content %}
 
-<h1>Welcome</h1>
-<p>Either download new video or click on all to show already downloaded videos.</p>
 {% if user %}
-<p>You are logged in as : {{user}}</p>
+<h1>Welcome {{ user.username }}</h1>
+<p>Either download new video or click on all to show already downloaded videos.</p>
 {% else %}
-<p>You are logged out.</p>
+<h1>Welcome</h1>
+<p>Please log in to use this app.</p>
 {% endif %}
 
 {% endblock %}

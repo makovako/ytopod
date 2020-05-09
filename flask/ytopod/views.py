@@ -1,7 +1,6 @@
 from flask import render_template, redirect, url_for, request, current_app as app, send_from_directory
 from flask_login import login_required, current_user
 from datetime import timedelta
-from .nav import nav
 from .forms import DownloadForm
 from . import db
 from .utils import extract_video_id
@@ -15,22 +14,61 @@ def initial_user_setup():
     if not User.query.all() and request.endpoint != "initial_setup":
         return redirect(url_for("initial_setup"))
 
-@app.before_request
-def clear_nav():
-    for link in nav:
-        link["active"] = False
-
 @app.errorhandler(404)
 def not_found(error):
     print(error)
-    return render_template("404.html", title="Not Found - ytopod", nav=nav)
+    return render_template("404.html", title="Not Found - ytopod",)
+
+@app.context_processor
+def global_properties():
+    user = current_user if current_user.is_authenticated else None
+    nav = {
+        "left": [
+            {
+                "name": "Home",
+                "url": "/",
+                "active": request.endpoint == "index"
+            },
+            {
+                "name": "All",
+                "url": "/all",
+                "active": request.endpoint == "all"
+            },
+            {
+                "name": "Download",
+                "url": "/download",
+                "active": request.endpoint == "download"
+            },
+        ],
+        "right": [
+            {
+                "name": "Logout",
+                "url": "/logout",
+                "active": False
+            },
+        ]
+    } if user else {
+        "left": [
+            {
+                "name": "Home",
+                "url": "/",
+                "active": request.endpoint == "index"
+            },
+        ],
+        "right": [
+            {
+                "name": "Login",
+                "url": "/login",
+                "active": False
+            },
+        ]
+    }
+    
+    return dict(user = user, nav = nav)
 
 @app.route("/")
 def index():
-    for link in nav:
-        if link["name"] == "Home":
-            link["active"] = True
-    return render_template("index.html", title="Home - ytopod", nav=nav, user=current_user.username if current_user.is_authenticated else None)
+    return render_template("index.html", title="Home - ytopod")
 
 @app.route('/download/<path>',methods=['GET'])
 def get_download_files(path):
@@ -41,16 +79,13 @@ def get_download_files(path):
 @app.route("/download", methods=("GET", "POST"))
 @login_required
 def download():
-    for link in nav:
-        if link["name"] == "Download":
-            link["active"] = True
     form = DownloadForm()
     if request.method == "POST" and form.validate():
         video_url = form.data['video_url']
         video_id = extract_video_id(video_url)
         if not video_id:
             form.video_url.errors.append("Cannot parse video URL")
-            return render_template("download.html", title="Download - ytopod", nav=nav, form=form)
+            return render_template("download.html", title="Download - ytopod", form=form)
         ok, res = download_video(video_url)
         if ok:
             db.session.add(res)
@@ -60,18 +95,15 @@ def download():
         else:
             form.video_url.errors.append("There was problem with Downloading.")
             form.video_url.errors.append(f'{res}')
-            return render_template("download.html", title="Download - ytopod", nav=nav, form=form)
+            return render_template("download.html", title="Download - ytopod", form=form)
             
-    return render_template("download.html", title="Download - ytopod", nav=nav, form=form)
+    return render_template("download.html", title="Download - ytopod", form=form)
 
 @app.route("/all")
 @login_required
 def all():
-    for link in nav:
-        if link["name"] == "All":
-            link["active"] = True
     videos = Video.query.all()
-    return render_template("all.html", title="All - ytopod", nav=nav, videos=videos)
+    return render_template("all.html", title="All - ytopod", videos=videos)
 
 @app.route("/delete/<id>")
 @login_required
