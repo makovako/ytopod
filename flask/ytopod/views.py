@@ -1,4 +1,6 @@
 from flask import render_template, redirect, url_for, request, current_app as app, send_from_directory
+from flask_login import login_required, current_user
+from datetime import timedelta
 from .nav import nav
 from .forms import DownloadForm
 from . import db
@@ -23,7 +25,7 @@ def index():
     for link in nav:
         if link["name"] == "Home":
             link["active"] = True
-    return render_template("index.html", title="Home - ytopod", nav=nav)
+    return render_template("index.html", title="Home - ytopod", nav=nav, user=current_user.username if current_user.is_authenticated else None)
 
 @app.route('/download/<path>',methods=['GET'])
 def get_download_files(path):
@@ -32,6 +34,7 @@ def get_download_files(path):
     return send_from_directory('download',path)
 
 @app.route("/download", methods=("GET", "POST"))
+@login_required
 def download():
     for link in nav:
         if link["name"] == "Download":
@@ -57,6 +60,7 @@ def download():
     return render_template("download.html", title="Download - ytopod", nav=nav, form=form)
 
 @app.route("/all")
+@login_required
 def all():
     for link in nav:
         if link["name"] == "All":
@@ -65,6 +69,7 @@ def all():
     return render_template("all.html", title="All - ytopod", nav=nav, videos=videos)
 
 @app.route("/delete/<id>")
+@login_required
 def delete(id):
     confirm = request.args.get("confirm")
     if confirm == "true":
