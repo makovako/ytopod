@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, request, current_app as ap
 from flask_login import login_required, current_user
 from datetime import timedelta
 from .forms import DownloadForm
-from . import db
+from . import db, http_basic_auth
 from .utils import extract_video_id
 from .models import Video, User
 from .download import download_video
@@ -66,11 +66,18 @@ def global_properties():
     
     return dict(user = user, nav = nav)
 
+@http_basic_auth.verify_password
+def verify_password(username, password):
+    user = User.query.filter_by(username=username).first()
+    if user and user.check_password(password):
+        return username
+
 @app.route("/")
 def index():
     return render_template("index.html", title="Home - ytopod")
 
 @app.route('/download/<path>',methods=['GET'])
+@http_basic_auth.login_required
 def get_download_files(path):
     """Allows all content of download folder to be served"""
     
