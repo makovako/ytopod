@@ -95,7 +95,6 @@
             if (msg === "Reload") {
                 bars = [...document.getElementById('progress-bars').children].slice(1)
                 console.log({bars});
-                
                 if (bars.every(bar => bar.children[2].textContent === "Done")){
                     bar.children[2].textContent = "Reloading page"
                     setTimeout(() => {
@@ -106,7 +105,7 @@
                 bar.children[2].textContent = msg
             }
         } else {
-            bar = document.getElementById('template-progress-bar').cloneNode(true)   
+            bar = document.getElementById('template-progress-bar').cloneNode(true)
             bar.id = id
             bar.style.display = "flex"
             bar.children[1].textContent = id

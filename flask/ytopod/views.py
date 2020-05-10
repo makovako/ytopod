@@ -120,9 +120,6 @@ def download():
         thread = Thread(target=video_dl, args=(video_url, video_id, app.root_path, request.base_url, app.app_context))
         thread.start()
         return redirect(url_for("all"))
-        
-        
-            
     return render_template("download.html", title="Download - ytopod", form=form)
 
 @socketio.on('connect')

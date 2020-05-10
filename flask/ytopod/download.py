@@ -19,10 +19,10 @@ def my_hook(d):
     """Helper function for printing, when youtube-dl has finished downloading content."""
 
     if d['status'] == 'finished':
-        filename = re.search(r'.*\/(.*)\..*',d["filename"]).group(1)        
+        filename = re.search(r'.*\/(.*)\..*',d["filename"]).group(1)
         socketio.emit("download",(f"Converting audio", 100, filename))
     if d['status'] == 'downloading':
-        filename = re.search(r'.*\/(.*)\..*',d["filename"]).group(1)        
+        filename = re.search(r'.*\/(.*)\..*',d["filename"]).group(1)
         percent = d['_percent_str'].split('.')[0]
         socketio.emit("download",(f"Downloading {percent}%", percent, filename))
         # print(d['filename'], d['_percent_str'], d['_eta_str'])
