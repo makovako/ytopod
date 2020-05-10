@@ -7,9 +7,10 @@ This app allows you to download youtube videos, convert them to audio and add th
 # Todo
 
 - [ ] more feeds
-  - [ ] edit metadata about feed
-  - [ ] assign video to more feeds
+  - [ ] edit metadata about feed - name, filename(slug), picture, author
+  - [ ] assign video to one feed
   - [ ] ordering per feed
+  - [ ] allow to regenerate feed
 - [x] auth
   - [x] login, protect almost all paths except home
   - [x] Add login mechanizms into UI, buttons, navigation filtering
@@ -26,3 +27,17 @@ This app allows you to download youtube videos, convert them to audio and add th
   - [x] auto ~~close~~ reload, ~~not sure~~
   - [ ] make socket connection only when previous site was from download, so it doesnt make useles socket connecitons on all `all` sites
     - [ ] or make separate page for viewing downloads and don't use `all` page
+- [ ] Podcast episodes/videos
+  - [ ] allow editing metadata
+  - [ ] before download fetch metadata and allow user to change them, name, filename (slug), description, uploader then download
+  - [ ] allow user to upload files
+- [ ] Config and Settings
+  - [ ] autoreload on download finish
+- [ ] User management
+  - [ ] Change password
+  - [ ] Delete user
+  - [ ] Create separate user/password for accessing podcasts/feeds
+- [ ] Presentation
+  - [ ] Create screenshots and gifs for github
+  - [ ] Create instructions for running
+  - [ ] Create About pages
