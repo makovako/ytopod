@@ -1,8 +1,9 @@
-from flask import Flask
+from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from .utils import create_download_directory
 from flask_httpauth import HTTPBasicAuth
+from datetime import timedelta
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -14,8 +15,10 @@ def create_app():
 
     db.init_app(app)
     login_manager.init_app(app)
-    
+
     create_download_directory()
+
+    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=5)
 
     with app.app_context():
         from . import views

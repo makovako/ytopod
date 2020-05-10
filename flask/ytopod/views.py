@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, current_app as app, send_from_directory
+from flask import render_template, redirect, url_for, request, current_app as app, send_from_directory, session
 from flask_login import login_required, current_user
 from datetime import timedelta
 from .forms import DownloadForm
@@ -11,6 +11,8 @@ import os
 
 @app.before_request
 def initial_user_setup():
+    session.permanent = True
+
     if not User.query.all() and request.endpoint != "initial_setup":
         return redirect(url_for("initial_setup"))
 
