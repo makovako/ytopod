@@ -2,12 +2,14 @@ from flask import render_template, redirect, url_for, request, current_app as ap
 from flask_login import login_required, current_user
 from datetime import timedelta
 from .forms import DownloadForm
-from . import db, http_basic_auth
+from . import db, http_basic_auth, socketio
 from .utils import extract_video_id
 from .models import Video, User
 from .download import download_video
 from .feed import generate_feed
 import os
+from threading import Thread
+import time
 
 @app.before_request
 def initial_user_setup():
@@ -88,6 +90,25 @@ def get_download_files(path):
 @app.route("/download", methods=("GET", "POST"))
 @login_required
 def download():
+    def video_dl(video_url, video_id, root_path, baseurl, ctx):
+        socketio.emit("download",("Started Download", 0, video_id))
+        ok, res = download_video(video_url, root_path)
+        socketio.emit("download",("Finnished Download", 100, video_id))
+
+        if ok:
+            with ctx():
+                # TODO missing error handling
+                socketio.emit("download",("Storing into DB", 100, video_id))
+                db.session.add(res)
+                db.session.commit()
+                socketio.emit("download",("Generating feed", 100,video_id))
+                generate_feed(Video.query.all(),baseurl, root_path)
+                socketio.emit("download",("Done", 100, video_id))
+                socketio.emit("download",("Reload",100, video_id))
+
+        else:
+            socketio.emit("download",("There was problem downloading", 0, video_id))
+
     form = DownloadForm()
     if request.method == "POST" and form.validate():
         video_url = form.data['video_url']
@@ -95,18 +116,22 @@ def download():
         if not video_id:
             form.video_url.errors.append("Cannot parse video URL")
             return render_template("download.html", title="Download - ytopod", form=form)
-        ok, res = download_video(video_url)
-        if ok:
-            db.session.add(res)
-            db.session.commit()
-            generate_feed(Video.query.all())
-            return redirect(url_for("all"))
-        else:
-            form.video_url.errors.append("There was problem with Downloading.")
-            form.video_url.errors.append(f'{res}')
-            return render_template("download.html", title="Download - ytopod", form=form)
+        # TODO Check if video already downloaded
+        thread = Thread(target=video_dl, args=(video_url, video_id, app.root_path, request.base_url, app.app_context))
+        thread.start()
+        return redirect(url_for("all"))
+        
+        
             
     return render_template("download.html", title="Download - ytopod", form=form)
+
+@socketio.on('connect')
+def test_connect():
+    print("SocketIO: Someone connected")
+
+@socketio.on('disconnect')
+def test_connect():
+    print("SocketIO: Someone disconnected")
 
 @app.route("/all")
 @login_required
@@ -123,4 +148,5 @@ def delete(id):
         os.remove(os.path.join(app.root_path,'download',f'{to_delete.youtube_id}.mp3'))
         db.session.delete(to_delete)
         db.session.commit()
+        generate_feed(Video.query.all(),request.base_url, app.root_path)
     return redirect(url_for("all"))
