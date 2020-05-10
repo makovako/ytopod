@@ -14,5 +14,4 @@ class Config:
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///'+path.join(basedir, environ.get('DB_PATH'))
     SQLALCHEMY_TRACK_MODIFICATIONS = environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
-    SQLALCHEMY_ECHO = environ.get('SQLALCHEMY_ECHO')
     TEMPLATES_AUTO_RELOAD = environ.get('TEMPLATES_AUTO_RELOAD')

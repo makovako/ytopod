@@ -4,6 +4,20 @@ Generating rss podcast feed from selected youtube videos.
 
 This app allows you to download youtube videos, convert them to audio and add them to rss feed, which can be added to podcast player. It is meant for listening to conferences and similar videos, where audio is enough and podcast players have many useful features for consuming such content.
 
+# Run
+
+How to run ytopod
+
+- install and setup docker
+- install docker-compose
+- in `flask` create `.env` file, you can copy it from `.env.sample`
+- default setup file, you should change sqlite db path and secret key at least
+- then build containers with `docker-compose build` in root of the project (where docker-compose.yml is located)
+- to start container run `docker-compose up`
+- to teardown container (deletes its content) run `docker-compose down`
+- to stop ("pause", saves stuff) container run `docker-compose stop`
+- to resume stopped container run `docker-compose start`
+
 # Todo
 
 - [ ] more feeds
@@ -41,3 +55,5 @@ This app allows you to download youtube videos, convert them to audio and add th
   - [ ] Create screenshots and gifs for github
   - [ ] Create instructions for running
   - [ ] Create About pages
+- [ ] Setup
+  - [ ] Move env file to root and add content trough docker-compose.yaml file
