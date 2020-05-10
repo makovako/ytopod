@@ -19,7 +19,10 @@ This app allows you to download youtube videos, convert them to audio and add th
     - [x] on register path ~~redirect home~~ raise 404 if there is user already
   - [x] create http auth for podcast protection
 - [ ] progress bar for videos being downloaded
-  - [ ] bootstrap progress bar on `all` site
-  - [ ] use socket io
-  - [ ] allow user to close it, maybe cancel the download
-  - [ ] auto close, not sure
+  - [x] bootstrap progress bar on `all` site
+  - [x] use socket io
+  - [x] ~~allow user to close it, maybe cancel the download~~ autoreloads when all downloads are done
+  - [ ] think about download cancel, but may be complicated
+  - [x] auto ~~close~~ reload, ~~not sure~~
+  - [ ] make socket connection only when previous site was from download, so it doesnt make useles socket connecitons on all `all` sites
+    - [ ] or make separate page for viewing downloads and don't use `all` page
