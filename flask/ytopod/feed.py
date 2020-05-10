@@ -2,10 +2,9 @@ from feedgen.feed import FeedGenerator
 from flask import request, current_app as app
 import os
 
-def generate_feed(videos):
+def generate_feed(videos, baseurl, root_path):
     """Creates feed from items from db"""
 
-    baseurl = request.host_url
 
     fg = FeedGenerator()
     fg.load_extension('podcast')
@@ -27,4 +26,4 @@ def generate_feed(videos):
         fe.podcast.itunes_image(video.thumbnail)
         fe.enclosure(baseurl+'download/'+video.youtube_id+'.mp3',0,'audio/mpeg')
     fg.rss_str(pretty=True)
-    fg.rss_file(os.path.join(app.root_path, 'download', 'feed.xml'))
+    fg.rss_file(os.path.join(root_path, 'download', 'feed.xml'))
