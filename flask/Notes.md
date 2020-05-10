@@ -10,6 +10,16 @@
 - `export FLASK_ENV=development`
 - `flask run`
 
+# Flask async
+
+- by default flask is blocking(synchronous) and there is no easy way to change it
+- some solutions
+  - quart - flask with async
+  - celery - task queue, separate service
+- used solution - threading
+  - start new thread for new task
+  - pass app context to it, so you can access app, db, request and other stuff
+
 ## Some variables
 
 -`request.url`- http://domain:port/path
