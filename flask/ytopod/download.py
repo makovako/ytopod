@@ -1,6 +1,7 @@
 import youtube_dl
 from .models import Video
-from flask import current_app as app
+from . import socketio
+import re
 
 class MyLogger(object):
     """Logger class for youtube_dl Logger to tell yt-dl to print errors"""
@@ -18,9 +19,13 @@ def my_hook(d):
     """Helper function for printing, when youtube-dl has finished downloading content."""
 
     if d['status'] == 'finished':
-        print('Done downloading')
+        filename = re.search(r'.*\/(.*)\..*',d["filename"]).group(1)        
+        socketio.emit("download",(f"Converting audio", 100, filename))
     if d['status'] == 'downloading':
-        print(d['filename'], d['_percent_str'], d['_eta_str'])
+        filename = re.search(r'.*\/(.*)\..*',d["filename"]).group(1)        
+        percent = d['_percent_str'].split('.')[0]
+        socketio.emit("download",(f"Downloading {percent}%", percent, filename))
+        # print(d['filename'], d['_percent_str'], d['_eta_str'])
 
 def get_useful_information(info):
     """Extracts useful information from video."""
@@ -33,11 +38,11 @@ def get_useful_information(info):
     result['uploader'] = info['uploader']
     return result
 
-def download_video(video_url):
+def download_video(video_url, root_path):
     ydl_opts = {
         "format": "bestaudio[ext=m4a]",
         "progress_hooks": [my_hook],
-        "outtmpl": app.root_path + "/download/%(id)s.%(ext)s",
+        "outtmpl": root_path + "/download/%(id)s.%(ext)s",
         "postprocessors": [{
             'key':'FFmpegExtractAudio',
             'preferredcodec':'mp3',
@@ -55,6 +60,9 @@ def download_video(video_url):
 
 
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([video_url])
+        try:
+            ydl.download([video_url])
+        except youtube_dl.utils.DownloadError as error:
+            return (False, f'Problem with downloading: {str(error)}')
     video = Video(info['id'], info['title'], info['description'], info['uploader'], info['thumbnail'])
     return (True, video)
