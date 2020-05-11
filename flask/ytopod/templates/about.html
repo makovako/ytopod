@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="row my-2">
+    <h1>About</h1>
+    <p>Ytopod is a webapp for creating podcast feeds from youtube videos. It will download given youtube video and convert it to audio format. Then it adds the audio to podcast rss file and presents it to podcast players to fetch. It requires one user, which will be created after initial setup. Currently it generates only one feed accessible at location <em>/download/feed.xml</em>. This endpoint is also secured by username and password, so the podcast player needs to support http auth for podcasts.</p>
+    <p>The app can be run using docker and directions are in the <a href="https://github.com/makovako/ytopod">github</a> repo. Currently it supports only one feed, saves metadata into sqlite database saved in the docker container and allows to delete the podcast videos. There are more features that I have in mind and some of them should be present in the readme file in the mentioned github repo.</p>
+</div>
+<div class="row row-col-1 my-2">
+    <h1>Screenshots</h1>
+    <div class="shadow-lg my-2">
+        <img style="width:100%;" src="/images/home-page.png" alt="Homepage of an app" srcset="">
+    </div>
+    <div class="shadow-lg my-2">
+        <img style="width:100%;" src="/images/download.png" alt="Homepage of an app" srcset="">
+    </div>
+    <div class="shadow-lg my-2">
+        <img style="width:100%;" src="/images/downloaded.png" alt="Homepage of an app" srcset="">
+    </div>
+</div>
+    
+{% endblock %}

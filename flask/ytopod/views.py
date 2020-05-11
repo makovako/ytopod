@@ -58,6 +58,11 @@ def global_properties():
                 "url": "/",
                 "active": request.endpoint == "index"
             },
+            {
+                "name": "About",
+                "url": "/about",
+                "active": request.endpoint == "about"
+            }
         ],
         "right": [
             {
@@ -147,3 +152,7 @@ def delete(id):
         db.session.commit()
         generate_feed(Video.query.all(),request.base_url, app.root_path)
     return redirect(url_for("all"))
+
+@app.route("/about")
+def about():
+    return render_template("about.html", title="About - ytopod")
