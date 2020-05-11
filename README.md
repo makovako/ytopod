@@ -17,6 +17,14 @@ How to run ytopod
 - to teardown container (deletes its content) run `docker-compose down`
 - to stop ("pause", saves stuff) container run `docker-compose stop`
 - to resume stopped container run `docker-compose start`
+- on inital setup create default user (currently there is only single user mode)
+- after downloading some videos, the feed is available on path `download/feed.xml`, it requires podcast player with http auth support
+
+# Screenshots
+
+![Home page](flask/ytopod/static/images/home-page.png)
+![Downloading](flask/ytopod/static/images/download.png)
+![Downloaded](flask/ytopod/static/images/downloaded.png)
 
 # Todo
 
